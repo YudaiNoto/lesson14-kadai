@@ -2,7 +2,10 @@ package controllers.reports;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -47,17 +50,43 @@ public class ReportsCreateServlet extends HttpServlet {
 
             Date report_date = new Date(System.currentTimeMillis());
             String rd_str = request.getParameter("report_date");
+
             if(rd_str != null && !rd_str.equals("")) {
                 report_date = Date.valueOf(request.getParameter("report_date"));
             }
             r.setReport_date(report_date);
-
             r.setTitle(request.getParameter("title"));
             r.setContent(request.getParameter("content"));
 
             Timestamp currentTime = new Timestamp(System.currentTimeMillis());
             r.setCreated_at(currentTime);
             r.setUpdated_at(currentTime);
+
+            String attendAt = request.getParameter("attend_at");
+            if(attendAt != null && !attendAt.equals("")){
+
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                java.util.Date attendAtDate = null;
+                try{
+                    attendAtDate = sdf.parse(attendAt);
+                    r.setAttend_at(new Time(attendAtDate.getTime()));
+                }catch(ParseException e){
+                    e.printStackTrace();
+                }
+            }
+            String leaveAt = request.getParameter("leave_at");
+            if(leaveAt != null && !leaveAt.equals("")){
+
+                SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm");
+                java.util.Date leaveAtDate = null;
+                try{
+                    leaveAtDate = sdf2.parse(leaveAt);
+                    r.setLeave_at(new Time(leaveAtDate.getTime()));
+                }catch(ParseException e){
+                    e.printStackTrace();
+                }
+            }
+
 
             List<String> errors = ReportValidator.validate(r);
             if(errors.size() > 0) {

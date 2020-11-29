@@ -26,5 +26,14 @@
 <textarea name="content" rows="10" cols="50">${report.content}</textarea>
 <br /><br />
 
+<label for="attend_at">出勤時間</label><br />
+<input type="time" name="attend_at" value="<fmt:formatDate value='${report.attend_at}' pattern='HH:mm' />" />
+<br /><br />
+
+<label for="leave_at">退勤時間</label><br />
+<input type="time" name="leave_at" value="<fmt:formatDate value='${report.leave_at}' pattern='HH:mm' />" />
+<br /><br />
+
 <input type="hidden" name="_token" value="${_token}" />
 <button type="submit">投稿</button>
+
